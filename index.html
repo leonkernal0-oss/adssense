@@ -1,1 +1,314 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>VoidTools</title></head><body><h1>Loading full site...</h1><p>If you see this, refresh in a moment.</p><script>location.reload()</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoidTools — Offline Utility Suite</title>
+  <meta name="description" content="Free offline tools: GPU stress, volume meter, currency, password, QR, units, color, hash and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07070c; --bg2: #0e0e16; --card: #12121c; --border: #1c1c2a;
+      --border-glow: rgba(0, 245, 212, 0.25); --accent: #00f5d4;
+      --accent-dim: rgba(0, 245, 212, 0.12); --purple: #a78bfa;
+      --text: #f1f1f6; --muted: #7a7a90; --success: #34d399; --danger: #f87171; --radius: 16px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Space Grotesk', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh;
+      background-image: radial-gradient(ellipse 80% 50% at 20% -10%, rgba(0,245,212,0.07), transparent),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(167,139,250,0.08), transparent);
+    }
+    header {
+      position: sticky; top: 0; z-index: 200; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+      background: rgba(7,7,12,0.85); backdrop-filter: blur(16px);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    .logo { font-weight: 700; font-size: 1.35rem; letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo span { opacity: 0.55; font-weight: 500; }
+    nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    nav button {
+      background: transparent; border: 1px solid transparent; color: var(--muted);
+      padding: 0.4rem 0.85rem; border-radius: 999px; cursor: pointer; font-size: 0.8rem;
+      font-family: inherit; font-weight: 500; transition: all 0.2s;
+    }
+    nav button:hover { color: var(--text); background: var(--accent-dim); }
+    nav button.active { color: var(--accent); background: var(--accent-dim); border-color: rgba(0,245,212,0.3); }
+    main { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+    .hero { text-align: center; margin-bottom: 2rem; }
+    .hero h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 0.4rem; }
+    .hero p { color: var(--muted); font-size: 0.95rem; }
+    .badge {
+      display: inline-block; margin-top: 0.75rem; padding: 0.25rem 0.7rem; border-radius: 999px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px;
+      background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(0,245,212,0.25);
+    }
+    .tool-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem;
+      transition: border-color 0.25s, box-shadow 0.25s; animation: fadeUp 0.35s ease;
+    }
+    .tool-card:hover { border-color: var(--border-glow); box-shadow: 0 0 40px rgba(0,245,212,0.04); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .tool-card h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.55rem; }
+    .tool-card .desc { color: var(--muted); font-size: 0.82rem; margin-bottom: 1.15rem; }
+    label { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 0.3rem; font-weight: 500; }
+    input, select, textarea {
+      width: 100%; background: var(--bg2); border: 1px solid var(--border); color: var(--text);
+      padding: 0.65rem 0.9rem; border-radius: 10px; font-size: 0.9rem; font-family: inherit; margin-bottom: 0.85rem; transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    .row { display: flex; gap: 0.75rem; align-items: flex-end; }
+    .row > * { flex: 1; }
+    button.action {
+      background: linear-gradient(135deg, var(--accent), #00c4a7); color: #07070c; border: none;
+      padding: 0.7rem 1.15rem; border-radius: 10px; font-weight: 600; cursor: pointer;
+      font-size: 0.88rem; font-family: inherit; width: 100%; transition: opacity 0.2s, transform 0.15s; margin-top: 0.2rem;
+    }
+    button.action:hover { opacity: 0.92; transform: translateY(-1px); }
+    button.action.secondary { background: transparent; border: 1px solid rgba(0,245,212,0.4); color: var(--accent); }
+    button.action.danger { background: linear-gradient(135deg, #f87171, #ef4444); color: #fff; }
+    button.action.purple { background: linear-gradient(135deg, var(--purple), #8b5cf6); color: #fff; }
+    .result {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem;
+      margin-top: 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem;
+      word-break: break-all; min-height: 2.4rem; color: var(--success);
+    }
+    .result.empty { color: var(--muted); }
+    .slider-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem; }
+    .slider-row input[type="range"] { flex: 1; margin: 0; accent-color: var(--accent); }
+    .slider-row span { min-width: 2.2rem; text-align: right; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
+    .checks { display: flex; flex-wrap: wrap; gap: 0.7rem 1.2rem; margin-bottom: 0.85rem; }
+    .checks label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; margin: 0; font-size: 0.85rem; color: var(--text); }
+    .checks input { width: auto; margin: 0; accent-color: var(--accent); }
+    .color-preview { width: 100%; height: 72px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 0.85rem; }
+    .color-vals { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.82rem; }
+    .color-vals div { background: var(--bg2); padding: 0.5rem 0.7rem; border-radius: 8px; border: 1px solid var(--border); }
+    .color-vals span { color: var(--muted); font-size: 0.7rem; }
+    #qr-canvas { display: block; margin: 0.75rem auto 0; background: #fff; border-radius: 10px; max-width: 100%; }
+    .hidden { display: none !important; }
+    footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
+    footer a { color: var(--accent); text-decoration: none; }
+    .ad-slot { margin: 1.75rem 0; text-align: center; }
+    .meter-wrap { background: var(--bg2); border-radius: 12px; height: 28px; overflow: hidden; border: 1px solid var(--border); margin: 0.75rem 0 1rem; position: relative; }
+    .meter-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--purple)); transition: width 0.08s linear; border-radius: 12px; }
+    .meter-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; pointer-events: none; }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+    .stat-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 0.7rem; text-align: center; }
+    .stat-box .val { font-size: 1.15rem; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+    .stat-box .lbl { font-size: 0.65rem; color: var(--muted); margin-top: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    canvas#gpu-canvas { width: 100%; height: 180px; border-radius: 12px; border: 1px solid var(--border); background: #000; display: block; margin-bottom: 0.85rem; }
+    canvas#vol-canvas { width: 100%; height: 80px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg2); display: block; margin-bottom: 0.85rem; }
+    .btn-row { display: flex; gap: 0.6rem; margin-top: 0.5rem; }
+    .btn-row button { flex: 1; }
+    @media (max-width: 600px) { header { padding: 0.85rem 1rem; } .row { flex-direction: column; } .stat-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">VOID<span>TOOLS</span></div>
+    <nav id="nav">
+      <button class="active" data-tool="gpu">GPU Test</button>
+      <button data-tool="volume">Volume</button>
+      <button data-tool="fps">FPS Bench</button>
+      <button data-tool="cpu">CPU Stress</button>
+      <button data-tool="currency">Currency</button>
+      <button data-tool="password">Password</button>
+      <button data-tool="qr">QR</button>
+      <button data-tool="units">Units</button>
+      <button data-tool="color">Color</button>
+      <button data-tool="hash">Hash</button>
+      <button data-tool="text">Text</button>
+      <button data-tool="base64">Base64</button>
+    </nav>
+  </header>
+  <main>
+    <div class="hero">
+      <h1>VoidTools</h1>
+      <p>Offline utility suite — GPU, audio, crypto & converters</p>
+      <span class="badge">100% CLIENT-SIDE · NO SERVER</span>
+    </div>
+    <div class="ad-slot" id="ad-top">
+<!-- BEGIN AADS AD UNIT 2457607 -->
+<div id="frame" style="width: 100%;margin: auto;position: relative; z-index: 99998;">
+          <iframe data-aa='2457607' src='//acceptable.a-ads.com/2457607/?size=Adaptive'
+                            style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+        </div>
+<!-- END AADS AD UNIT 2457607 -->
+    </div>
+    <section class="tool-card" id="tool-gpu">
+      <h2>⚡ GPU Shader Stress</h2>
+      <p class="desc">WebGL fragment shader stress test. Watch heat & fill-rate.</p>
+      <canvas id="gpu-canvas"></canvas>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="val" id="gpu-fps">—</div><div class="lbl">FPS</div></div>
+        <div class="stat-box"><div class="val" id="gpu-frames">0</div><div class="lbl">Frames</div></div>
+        <div class="stat-box"><div class="val" id="gpu-ms">—</div><div class="lbl">ms/frame</div></div>
+      </div>
+      <label>Complexity</label>
+      <div class="slider-row"><input type="range" id="gpu-complexity" min="1" max="20" value="8"><span id="gpu-comp-val">8</span></div>
+      <div class="btn-row">
+        <button class="action purple" id="gpu-start" onclick="startGPU()">Start Stress</button>
+        <button class="action secondary" onclick="stopGPU()">Stop</button>
+      </div>
+    </section>
+    <section class="tool-card hidden" id="tool-volume">
+      <h2>🎙 Volume / Mic Meter</h2>
+      <p class="desc">Live microphone level + waveform. Needs mic permission.</p>
+      <canvas id="vol-canvas"></canvas>
+      <div class="meter-wrap"><div class="meter-fill" id="vol-fill"></div><div class="meter-label" id="vol-label">0%</div></div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="val" id="vol-db">—</div><div class="lbl">dB</div></div>
+        <div class="stat-box"><div class="val" id="vol-peak">—</div><div class="lbl">Peak</div></div>
+        <div class="stat-box"><div class="val" id="vol-rms">—</div><div class="lbl">RMS</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="action" onclick="startVolume()">Start Mic</button>
+        <button class="action secondary" onclick="stopVolume()">Stop</button>
+      </div>
+    </section>
+    <section class="tool-card hidden" id="tool-fps">
+      <h2>📊 FPS Benchmark</h2>
+      <p class="desc">Measure browser rendering performance over 5 seconds.</p>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="val" id="fps-avg">—</div><div class="lbl">Avg FPS</div></div>
+        <div class="stat-box"><div class="val" id="fps-min">—</div><div class="lbl">Min</div></div>
+        <div class="stat-box"><div class="val" id="fps-max">—</div><div class="lbl">Max</div></div>
+      </div>
+      <div class="meter-wrap"><div class="meter-fill" id="fps-bar" style="width:0%"></div><div class="meter-label" id="fps-bar-label">Ready</div></div>
+      <button class="action purple" onclick="runFPSBench()">Run 5s Benchmark</button>
+    </section>
+    <section class="tool-card hidden" id="tool-cpu">
+      <h2>🔥 CPU Stress Test</h2>
+      <p class="desc">JavaScript heavy loop. Measures ops/sec.</p>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="val" id="cpu-ops">—</div><div class="lbl">Ops/sec</div></div>
+        <div class="stat-box"><div class="val" id="cpu-total">0</div><div class="lbl">Total ops</div></div>
+        <div class="stat-box"><div class="val" id="cpu-time">0s</div><div class="lbl">Runtime</div></div>
+      </div>
+      <label>Workers (threads)</label>
+      <div class="slider-row"><input type="range" id="cpu-workers" min="1" max="8" value="2"><span id="cpu-workers-val">2</span></div>
+      <div class="btn-row">
+        <button class="action danger" onclick="startCPU()">Start Stress</button>
+        <button class="action secondary" onclick="stopCPU()">Stop</button>
+      </div>
+    </section>
+    <section class="tool-card hidden" id="tool-currency">
+      <h2>💱 Currency Converter</h2>
+      <p class="desc">Offline rates snapshot. Edit & save in localStorage.</p>
+      <div class="row">
+        <div><label>Amount</label><input type="number" id="cur-amount" value="100" min="0" step="any"></div>
+        <div><label>From</label><select id="cur-from"></select></div>
+        <div><label>To</label><select id="cur-to"></select></div>
+      </div>
+      <button class="action" onclick="convertCurrency()">Convert</button>
+      <div class="result empty" id="cur-result">Result appears here</div>
+    </section>
+    <section class="tool-card hidden" id="tool-password">
+      <h2>🔑 Password Generator</h2>
+      <p class="desc">Crypto-secure random passwords.</p>
+      <label>Length</label>
+      <div class="slider-row"><input type="range" id="pw-len" min="8" max="64" value="16"><span id="pw-len-val">16</span></div>
+      <div class="checks">
+        <label><input type="checkbox" id="pw-upper" checked> Uppercase</label>
+        <label><input type="checkbox" id="pw-lower" checked> Lowercase</label>
+        <label><input type="checkbox" id="pw-num" checked> Numbers</label>
+        <label><input type="checkbox" id="pw-sym"> Symbols</label>
+      </div>
+      <button class="action" onclick="genPassword()">Generate</button>
+      <div class="result empty" id="pw-result">Click generate</div>
+      <button class="action secondary" style="margin-top:0.5rem;" onclick="copyText('pw-result')">Copy</button>
+    </section>
+    <section class="tool-card hidden" id="tool-qr">
+      <h2>📷 QR Code</h2>
+      <p class="desc">Pure offline QR generator.</p>
+      <label>Text or URL</label>
+      <input type="text" id="qr-text" placeholder="https://example.com">
+      <button class="action" onclick="genQR()">Generate QR</button>
+      <canvas id="qr-canvas" width="220" height="220" class="hidden"></canvas>
+    </section>
+    <section class="tool-card hidden" id="tool-units">
+      <h2>📏 Unit Converter</h2>
+      <p class="desc">Length, weight, temp, area, volume, speed, data.</p>
+      <label>Category</label>
+      <select id="unit-cat" onchange="loadUnitOptions()"></select>
+      <div class="row">
+        <div><label>Value</label><input type="number" id="unit-val" value="1" step="any"></div>
+        <div><label>From</label><select id="unit-from"></select></div>
+        <div><label>To</label><select id="unit-to"></select></div>
+      </div>
+      <button class="action" onclick="convertUnit()">Convert</button>
+      <div class="result empty" id="unit-result">Result appears here</div>
+    </section>
+    <section class="tool-card hidden" id="tool-color">
+      <h2>🎨 Color Picker</h2>
+      <p class="desc">HEX · RGB · HSL · CMYK</p>
+      <label>Pick a color</label>
+      <input type="color" id="color-pick" value="#00f5d4" style="height:48px;padding:4px;cursor:pointer;">
+      <div class="color-preview" id="color-preview" style="background:#00f5d4;"></div>
+      <div class="color-vals">
+        <div><span>HEX</span><br><strong id="c-hex">#00F5D4</strong></div>
+        <div><span>RGB</span><br><strong id="c-rgb">0, 245, 212</strong></div>
+        <div><span>HSL</span><br><strong id="c-hsl">171°, 100%, 48%</strong></div>
+        <div><span>CMYK</span><br><strong id="c-cmyk">100, 0, 13, 4</strong></div>
+      </div>
+    </section>
+    <section class="tool-card hidden" id="tool-hash">
+      <h2>#️⃣ Hash Generator</h2>
+      <p class="desc">SHA-1 / 256 / 384 / 512 via Web Crypto.</p>
+      <label>Text</label>
+      <textarea id="hash-in" rows="3" placeholder="Enter text..."></textarea>
+      <label>Algorithm</label>
+      <select id="hash-algo">
+        <option value="SHA-256">SHA-256</option><option value="SHA-1">SHA-1</option>
+        <option value="SHA-384">SHA-384</option><option value="SHA-512">SHA-512</option>
+      </select>
+      <button class="action" onclick="genHash()">Hash</button>
+      <div class="result empty" id="hash-result">Hash appears here</div>
+      <button class="action secondary" style="margin-top:0.5rem;" onclick="copyText('hash-result')">Copy</button>
+    </section>
+    <section class="tool-card hidden" id="tool-text">
+      <h2>✏️ Text Tools</h2>
+      <p class="desc">Case, reverse, slug, counts.</p>
+      <label>Your text</label>
+      <textarea id="text-in" rows="4" placeholder="Paste or type..."></textarea>
+      <div class="row" style="margin-bottom:0.5rem;">
+        <button class="action secondary" onclick="textTransform('upper')">UPPER</button>
+        <button class="action secondary" onclick="textTransform('lower')">lower</button>
+        <button class="action secondary" onclick="textTransform('title')">Title</button>
+      </div>
+      <div class="row">
+        <button class="action secondary" onclick="textTransform('reverse')">Reverse</button>
+        <button class="action secondary" onclick="textTransform('slug')">slug-ify</button>
+        <button class="action secondary" onclick="textCount()">Count</button>
+      </div>
+      <div class="result empty" id="text-result">Output / stats</div>
+    </section>
+    <section class="tool-card hidden" id="tool-base64">
+      <h2>🔐 Base64</h2>
+      <p class="desc">Encode & decode offline.</p>
+      <label>Input</label>
+      <textarea id="b64-in" rows="3" placeholder="Text or Base64..."></textarea>
+      <div class="row">
+        <button class="action" onclick="b64Encode()">Encode</button>
+        <button class="action secondary" onclick="b64Decode()">Decode</button>
+      </div>
+      <div class="result empty" id="b64-result">Result here</div>
+      <button class="action secondary" style="margin-top:0.5rem;" onclick="copyText('b64-result')">Copy</button>
+    </section>
+    <div class="ad-slot" id="ad-bottom">
+<!-- BEGIN AADS AD UNIT 2457607 -->
+<div id="frame" style="width: 100%;margin: auto;position: relative; z-index: 99998;">
+          <iframe data-aa='2457607' src='//acceptable.a-ads.com/2457607/?size=Adaptive'
+                            style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+        </div>
+<!-- END AADS AD UNIT 2457607 -->
+    </div>
+  </main>
+  <footer>VoidTools · offline suite · <a href="https://github.com/leonkernal0-oss/adssense" target="_blank">GitHub</a></footer>
+  <script src="app.js"></script>
+</body>
+</html>
